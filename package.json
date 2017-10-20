@@ -1,0 +1,37 @@
+{
+  "name": "itstime",
+  "version": "1.0.0",
+  "description": "Its Time - Jobber, Ahgora and Toggl integration",
+  "main": "src/index.js",
+  "author": "Carlo Schneider <uab.carlo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "xo",
+    "prestart": "yarn run lint",
+    "start": "nodemon bin/itstime.js --exec 'yarn run lint && node'"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "nodemon": "^1.12.1",
+    "xo": "^0.18.2"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "inquirer": "^3.2.3",
+    "json-beautify": "^1.0.1",
+    "moment": "^2.18.1",
+    "mri": "^1.1.0",
+    "toggl-api": "^1.0.1"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": true,
+    "rules": {
+      "object-curly-spacing": 0,
+      "no-new": 0,
+      "capitalized-comments": [
+        0
+      ]
+    }
+  }
+}
