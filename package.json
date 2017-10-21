@@ -2,7 +2,10 @@
   "name": "itstime",
   "version": "1.0.0",
   "description": "Its Time - Jobber, Ahgora and Toggl integration",
-  "main": "src/index.js",
+  "main": "bin/itstime.js",
+  "bin": {
+    "itstime": "bin/itstime.js"
+  },
   "author": "Carlo Schneider <uab.carlo@gmail.com>",
   "license": "MIT",
   "scripts": {
