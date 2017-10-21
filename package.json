@@ -1,6 +1,6 @@
 {
   "name": "itstime",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Its Time - Jobber, Ahgora and Toggl integration",
   "main": "bin/itstime.js",
   "bin": {
