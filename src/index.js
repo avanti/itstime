@@ -6,9 +6,23 @@ class Itstime {
   }
 
   command() {
-    const Module = require(`./commands/${this.cmd}`)
+    let Module
+
+    if (typeof this.cmd !== 'undefined') {
+      Module = require(`./commands/${this.cmd}`)
+    }
+
+    if (this._isHelp()) {
+      Module = require(`./commands/help`)
+    }
 
     return new Module(this.args)
+  }
+
+  _isHelp() {
+    return (
+      this.args._.length < 1 && (this.args.help === true || this.args.h === true)
+    )
   }
 }
 

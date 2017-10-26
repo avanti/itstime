@@ -7,7 +7,7 @@ const beautify = require('json-beautify')
 const config = require('../config/')
 
 class Setup {
-  constructor() {
+  constructor(args) {
     this.questions = [
       {
         name: 'ahgora_id',
@@ -41,6 +41,14 @@ class Setup {
       }
     ]
 
+    if (args.help === true) {
+      this.help()
+    } else {
+      this.start()
+    }
+  }
+
+  start() {
     this.ask()
   }
 
@@ -75,6 +83,15 @@ class Setup {
         resolve(config.dotFile)
       })
     })
+  }
+
+  help() {
+    /* eslint-disable no-multi-spaces */
+    const help =  '\nUsage:\n' +
+                  '  \x1b[36mitstime\x1b[0m setup\n'
+    /* eslint-disable no-multi-spaces */
+
+    console.log(help)
   }
 }
 

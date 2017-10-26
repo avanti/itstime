@@ -5,6 +5,14 @@ class Refresh {
     this.args = args
     this.bootstrap = new Bootstrap()
 
+    if (args.help === true) {
+      this.help()
+    } else {
+      this.start()
+    }
+  }
+
+  start() {
     this.getDotFile()
   }
 
@@ -29,6 +37,24 @@ class Refresh {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  help() {
+    /* eslint-disable no-multi-spaces */
+    const help =  '\nUsage:\n' +
+                  '  \x1b[36mitstime\x1b[0m refresh [<options>] [newValue]\n\n' +
+
+                  'Options:\n' +
+                  '  \x1b[33m--ahgora_id\n' +
+                  '  --ahgora_userId\n' +
+                  '  --ahgora_password\n' +
+                  '  --jobber_userId\n' +
+                  '  --jobber_token\n' +
+                  '  --toggl_token\n' +
+                  '  --toggl_workspaceId\x1b[0m\n'
+    /* eslint-disable no-multi-spaces */
+
+    console.log(help)
   }
 }
 

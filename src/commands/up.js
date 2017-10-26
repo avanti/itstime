@@ -6,7 +6,11 @@ class Up extends Commom {
   constructor(args) {
     super(args)
 
-    this.start()
+    if (args.help === true) {
+      this.help()
+    } else {
+      this.start()
+    }
   }
 
   async start() {
@@ -60,6 +64,20 @@ class Up extends Commom {
         throw new Error(err)
       }
     })
+  }
+
+  help() {
+    /* eslint-disable no-multi-spaces */
+    const help =  '\nUsage:\n' +
+                  '  \x1b[36mitstime\x1b[0m up <command>\n\n' +
+
+                  'Commands:\n' +
+                  '  today           Insert in Jobber status of today\n' +
+                  '  yesterday       Insert in Jobber status of yesterday\n' +
+                  '  <date>          Insert in Jobber status of a date <2017-06-29>\n'
+    /* eslint-disable no-multi-spaces */
+
+    console.log(help)
   }
 }
 
