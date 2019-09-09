@@ -106,72 +106,9 @@ class Commom {
   }
 
   /**
-   * Ahgora
-   */
-  async getAhgoraHits() {
-    const account = {
-      company: this.config.ahgora_id,
-      matricula: this.config.ahgora_userId,
-      senha: this.config.ahgora_password,
-      mes: moment(this.date).format('MM'),
-      ano: moment(this.date).format('YYYY'),
-    }
-
-    const ahgora = new Ahgora(account)
-
-    const date = moment(this.date).format('YYYY-MM-DD')
-
-    let report
-
-    try {
-      report = await ahgora.getReport(date)
-    } catch (err) {
-      console.log('Error:', err)
-      throw new Error(err)
-    }
-
-    if (report.length % 2 > 0) {
-      const err = 'Odd hits'
-      console.log('Error:', err)
-      throw new Error(err)
-    }
-
-    return {
-      report,
-      normalize: this.normalizeAhgoraReport(report),
-    }
-  }
-
-  normalizeAhgoraReport(report) {
-    return report.reduce((accumulator, currentValue) => {
-      const time = this.splitAhgoraTime(currentValue.hora)
-      const formated = moment(this.date)
-        .second(0)
-        .minute(time.minute)
-        .hour(time.hour)
-        .format()
-
-      return accumulator.concat(formated)
-    }, [])
-  }
-
-  splitAhgoraTime(time) {
-    const hour = parseInt(time.substr(0, 2), 10)
-    const minute = parseInt(time.substr(2), 10)
-
-    return {
-      hour,
-      minute,
-    }
-  }
-
-  /**
    * Mount
    */
-  mountInteractions(entries, hits) {
-    const hitsLength = hits.length
-    const entriesLength = entries.length
-
+  mountInteractions(entries) {
     return entries.reduce((accumulator, currentValue, index) => {
       const entry = {
         IDUsr: 23,
@@ -180,37 +117,9 @@ class Commom {
         Inicio: moment(currentValue.start)
           .second(0)
           .format('YYYY-MM-DDTHH:mm:ss.000Z'),
-      }
-
-      if (index === 0) {
-        entry.Inicio = moment(hits[0])
+        Fim: moment(currentValue.end)
           .second(0)
-          .format('YYYY-MM-DDTHH:mm:ss.000Z')
-      } else {
-        const prev = entries[index - 1]
-
-        const previousEnd = moment(prev.end)
-        const currentStart = moment(currentValue.start)
-
-        if (currentStart.diff(previousEnd, 'minutes') > 50) {
-          accumulator[index - 1].Fim = moment(hits[1])
-            .second(0)
-            .format('YYYY-MM-DDTHH:mm:ss.000Z')
-
-          entry.Inicio = moment(hits[2])
-            .second(0)
-            .format('YYYY-MM-DDTHH:mm:ss.000Z')
-        } else {
-          accumulator[index - 1].Fim = moment(currentValue.start)
-            .second(0)
-            .format('YYYY-MM-DDTHH:mm:ss.000Z')
-        }
-
-        if (index === entriesLength - 1) {
-          entry.Fim = moment(hits[hitsLength - 1])
-            .second(0)
-            .format('YYYY-MM-DDTHH:mm:ss.000Z')
-        }
+          .format('YYYY-MM-DDTHH:mm:ss.000Z'),
       }
 
       return accumulator.concat(entry)
