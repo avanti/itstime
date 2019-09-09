@@ -46,27 +46,36 @@ class Up extends Commom {
     jobs.map(async currentValue => {
       jobsPromises.push(
         new Promise(async (resolve, reject) => {
-          const raw = await axios.post(taticoUrl, currentValue, {
-            headers: TATICO_REQUEST_HEADERS,
-          })
+          const raw = await axios
+            .post(taticoUrl, currentValue, {
+              headers: TATICO_REQUEST_HEADERS,
+            })
+            .catch(error => {
+              reject("Couldn't finish request. " + error)
+            })
 
-          console.log(raw.status)
-
-          if (raw.status !== 200) reject()
-          resolve(raw)
+          if (raw && raw.status == 200) {
+            resolve(raw)
+            return true
+          }
+        }).catch(err => {
+          throw new Error(err)
         })
       )
+    })
 
-      try {
-        Promise.all(jobsPromises).then(res => {
+    await Promise.all(jobsPromises)
+      .then(res => {
+        res.map(job => {
+          console.log(job.data)
           console.log('Done!')
           console.log('\n')
         })
-      } catch (err) {
-        console.error('Error: On up jobs.', err)
+        console.log(res.length + ' jobs were uploaded!')
+      })
+      .catch(err => {
         throw new Error(err)
-      }
-    })
+      })
   }
 
   help() {
