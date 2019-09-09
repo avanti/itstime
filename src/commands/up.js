@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const Commom = require('./commom')
+const Commom = require('./common')
 
 class Up extends Commom {
   constructor(args) {
@@ -41,17 +41,18 @@ class Up extends Commom {
     const jobberUrl = 'http://jobber-api.eavanti.com.br/api/v1/interactions'
 
     jobs.map(async currentValue => {
+      return true
       try {
         const job = await axios.post(jobberUrl, currentValue, {
           headers: {
-            Authorization: `Bearer ${this.config.jobber_token}`
-          }
+            Authorization: `Bearer ${this.config.jobber_token}`,
+          },
         })
 
         const response = {
           start: job.data.interaction.started_at,
           end: job.data.interaction.finished_at,
-          description: job.data.interaction.description
+          description: job.data.interaction.description,
         }
 
         console.log('Done!')
@@ -68,13 +69,13 @@ class Up extends Commom {
 
   help() {
     /* eslint-disable no-multi-spaces */
-    const help =  '\nUsage:\n' +
-                  '  \x1b[36mitstime\x1b[0m up <command>\n\n' +
-
-                  'Commands:\n' +
-                  '  today           Insert in Jobber status of today\n' +
-                  '  yesterday       Insert in Jobber status of yesterday\n' +
-                  '  <date>          Insert in Jobber status of a date <2017-06-29>\n'
+    const help =
+      '\nUsage:\n' +
+      '  \x1b[36mitstime\x1b[0m up <command>\n\n' +
+      'Commands:\n' +
+      '  today           Insert in Jobber status of today\n' +
+      '  yesterday       Insert in Jobber status of yesterday\n' +
+      '  <date>          Insert in Jobber status of a date <2017-06-29>\n'
     /* eslint-disable no-multi-spaces */
 
     console.log(help)

@@ -1,4 +1,4 @@
-const Commom = require('./commom')
+const Commom = require('./common')
 
 class Status extends Commom {
   constructor(args) {
@@ -35,9 +35,9 @@ class Status extends Commom {
     const status = mount.reduce((accumulator, currentValue) => {
       /* eslint-disable camelcase */
       return accumulator.concat({
-        description: currentValue.description,
+        id: currentValue.job_id,
         started_at: currentValue.started_at,
-        finished_at: currentValue.finished_at
+        finished_at: currentValue.finished_at,
       })
       /* eslint-disable camelcase */
     }, [])
@@ -47,13 +47,13 @@ class Status extends Commom {
 
   help() {
     /* eslint-disable no-multi-spaces */
-    const help =  '\nUsage:\n' +
-                  '  \x1b[36mitstime\x1b[0m status <command>\n\n' +
-
-                  'Commands:\n' +
-                  '  today           Return status of today\n' +
-                  '  yesterday       Return status of yesterday\n' +
-                  '  <date>          Return status of a date <2017-06-29>\n'
+    const help =
+      '\nUsage:\n' +
+      '  \x1b[36mitstime\x1b[0m status <command>\n\n' +
+      'Commands:\n' +
+      '  today           Return status of today\n' +
+      '  yesterday       Return status of yesterday\n' +
+      '  <date>          Return status of a date <2017-06-29>\n'
     /* eslint-disable no-multi-spaces */
 
     console.log(help)

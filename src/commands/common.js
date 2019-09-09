@@ -19,7 +19,9 @@ class Commom {
     if (argDate === 'today' || typeof argDate === 'undefined') {
       this.date = moment().format()
     } else if (argDate === 'yesterday') {
-      this.date = moment().subtract(1, 'day').format()
+      this.date = moment()
+        .subtract(1, 'day')
+        .format()
     } else {
       this.date = moment(argDate).format()
     }
@@ -53,7 +55,7 @@ class Commom {
       until: filterDate,
       workspace_id: this.config.toggl_workspaceId,
       order_desc: 'off',
-      user_agent: 'carlo.schneider@penseavanti.com.br'
+      user_agent: 'carlo.schneider@penseavanti.com.br',
     }
     /* eslint-disable camelcase */
 
@@ -62,7 +64,7 @@ class Commom {
 
       return {
         report,
-        normalize: this.normalizeTogglReport(report)
+        normalize: this.normalizeTogglReport(report),
       }
     } catch (err) {
       console.log('Error:', err)
@@ -80,7 +82,7 @@ class Commom {
         id: split.id,
         description: split.description,
         start: currentValue.start,
-        end: currentValue.end
+        end: currentValue.end,
       }
 
       return accumulator.concat(object)
@@ -88,18 +90,18 @@ class Commom {
   }
 
   splitJobId(string) {
-    if (/(#)([0-9]*)( - )(.*)/gi.test(string) === false) {
+    if (/(#)([0-9]*)/gi.test(string) === false) {
       const error = 'Please set a valid description in Toggl. Ie: #123 - Task name'
 
       console.log('Error:', error)
       throw new Error(error)
     }
 
-    const [, , id, , description] = /(#)([0-9]*)( - )(.*)/gi.exec(string)
+    const [, , id, , description] = /(#)([0-9]*)/gi.exec(string)
 
     return {
       id,
-      description
+      description,
     }
   }
 
@@ -112,7 +114,7 @@ class Commom {
       matricula: this.config.ahgora_userId,
       senha: this.config.ahgora_password,
       mes: moment(this.date).format('MM'),
-      ano: moment(this.date).format('YYYY')
+      ano: moment(this.date).format('YYYY'),
     }
 
     const ahgora = new Ahgora(account)
@@ -136,7 +138,7 @@ class Commom {
 
     return {
       report,
-      normalize: this.normalizeAhgoraReport(report)
+      normalize: this.normalizeAhgoraReport(report),
     }
   }
 
@@ -159,7 +161,7 @@ class Commom {
 
     return {
       hour,
-      minute
+      minute,
     }
   }
 
@@ -172,19 +174,18 @@ class Commom {
 
     return entries.reduce((accumulator, currentValue, index) => {
       const entry = {
-        user_id: this.config.jobber_userId,
-        job_id: currentValue.id,
-        description: currentValue.description,
-        start: moment(currentValue.start),
-        started_at: moment(currentValue.start).second(0).format('YYYY-MM-DD HH:mm:ss'),
-        _started_at_hour: moment(currentValue.start).format('HH:mm'),
-        started_at_date: moment().second(0).format('YYYY-MM-DD HH:mm:ss'),
-        finished_at_date: moment().second(0).format('YYYY-MM-DD HH:mm:ss')
+        IDUsr: 23,
+        IDTarefa: currentValue.id,
+        Manual: true,
+        Inicio: moment(currentValue.start)
+          .second(0)
+          .format('YYYY-MM-DDTHH:mm:ss.000Z'),
       }
 
       if (index === 0) {
-        entry.started_at = moment(hits[0]).second(0).format('YYYY-MM-DD HH:mm:ss')
-        entry._started_at_hour = moment(hits[0]).format('HH:mm')
+        entry.Inicio = moment(hits[0])
+          .second(0)
+          .format('YYYY-MM-DDTHH:mm:ss.000Z')
       } else {
         const prev = entries[index - 1]
 
@@ -192,20 +193,23 @@ class Commom {
         const currentStart = moment(currentValue.start)
 
         if (currentStart.diff(previousEnd, 'minutes') > 50) {
-          accumulator[index - 1].finished_at = moment(hits[1]).second(0).format('YYYY-MM-DD HH:mm:ss')
-          accumulator[index - 1]._finished_at_hour = moment(hits[1]).format('HH:mm')
+          accumulator[index - 1].Fim = moment(hits[1])
+            .second(0)
+            .format('YYYY-MM-DDTHH:mm:ss.000Z')
 
-          entry.started_at = moment(hits[2]).second(0).format('YYYY-MM-DD HH:mm:ss')
-          entry._started_at_hour = moment(hits[2]).format('HH:mm')
+          entry.Inicio = moment(hits[2])
+            .second(0)
+            .format('YYYY-MM-DDTHH:mm:ss.000Z')
         } else {
-          accumulator[index - 1].end = currentValue.start
-          accumulator[index - 1].finished_at = moment(currentValue.start).second(0).format('YYYY-MM-DD HH:mm:ss')
-          accumulator[index - 1]._finished_at_hour = moment(currentValue.start).format('HH:mm')
+          accumulator[index - 1].Fim = moment(currentValue.start)
+            .second(0)
+            .format('YYYY-MM-DDTHH:mm:ss.000Z')
         }
 
         if (index === entriesLength - 1) {
-          entry.finished_at = moment(hits[hitsLength - 1]).second(0).format('YYYY-MM-DD HH:mm:ss')
-          entry._finished_at_hour = moment(hits[hitsLength - 1]).format('HH:mm')
+          entry.Fim = moment(hits[hitsLength - 1])
+            .second(0)
+            .format('YYYY-MM-DDTHH:mm:ss.000Z')
         }
       }
 
