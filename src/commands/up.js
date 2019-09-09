@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const Commom = require('./common')
+const Common = require('./common')
 
 const TATICO_REQUEST_HEADERS = {
   App: '7DE19B1B-BAB5-4D46-A861-729AA8DFFB19',
@@ -12,7 +12,7 @@ const TATICO_REQUEST_HEADERS = {
   'Content-Type': 'application/json',
 }
 
-class Up extends Commom {
+class Up extends Common {
   constructor(args) {
     super(args)
 
@@ -46,36 +46,34 @@ class Up extends Commom {
     jobs.map(async currentValue => {
       jobsPromises.push(
         new Promise(async (resolve, reject) => {
-          const raw = await axios
-            .post(taticoUrl, currentValue, {
+          try {
+            const raw = await axios.post(taticoUrl, currentValue, {
               headers: TATICO_REQUEST_HEADERS,
             })
-            .catch(error => {
-              reject("Couldn't finish request. " + error)
-            })
 
-          if (raw && raw.status == 200) {
-            resolve(raw)
-            return true
+            if (raw && raw.status == 200) {
+              resolve(raw)
+            }
+            reject()
+          } catch (error) {
+            throw new Error(error)
           }
-        }).catch(err => {
-          throw new Error(err)
         })
       )
     })
 
-    await Promise.all(jobsPromises)
-      .then(res => {
-        res.map(job => {
-          console.log(job.data)
-          console.log('Done!')
-          console.log('\n')
-        })
-        console.log(res.length + ' jobs were uploaded!')
+    try {
+      const uploadedJobs = await Promise.all(jobsPromises)
+
+      uploadedJobs.map(job => {
+        console.log(job.data)
+        console.log('Done!')
+        console.log('\n')
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      console.log(uploadedJobs.length + ' jobs were uploaded!')
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   help() {

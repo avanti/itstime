@@ -2,9 +2,8 @@ const moment = require('moment')
 
 const Bootstrap = require('../libs/bootstrap')
 const Toggl = require('../libs/toggl')
-const Ahgora = require('../libs/ahgora')
 
-class Commom {
+class Common {
   constructor(args) {
     this.args = args
 
@@ -127,4 +126,4 @@ class Commom {
   }
 }
 
-module.exports = Commom
+module.exports = Common

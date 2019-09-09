@@ -1,6 +1,6 @@
-const Commom = require('./common')
+const Common = require('./common')
 
-class Status extends Commom {
+class Status extends Common {
   constructor(args) {
     super(args)
 

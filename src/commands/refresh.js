@@ -41,17 +41,15 @@ class Refresh {
 
   help() {
     /* eslint-disable no-multi-spaces */
-    const help =  '\nUsage:\n' +
-                  '  \x1b[36mitstime\x1b[0m refresh [<options>] [newValue]\n\n' +
-
-                  'Options:\n' +
-                  '  \x1b[33m--ahgora_id\n' +
-                  '  --ahgora_userId\n' +
-                  '  --ahgora_password\n' +
-                  '  --jobber_userId\n' +
-                  '  --jobber_token\n' +
-                  '  --toggl_token\n' +
-                  '  --toggl_workspaceId\x1b[0m\n'
+    const help =
+      '\nUsage:\n' +
+      '  \x1b[36mitstime\x1b[0m refresh [<options>] [newValue]\n\n' +
+      'Options:\n' +
+      '  --ahgora_password\n' +
+      '  --jobber_userId\n' +
+      '  --jobber_token\n' +
+      '  --toggl_token\n' +
+      '  --toggl_workspaceId\x1b[0m\n'
     /* eslint-disable no-multi-spaces */
 
     console.log(help)
