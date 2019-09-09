@@ -22,22 +22,14 @@ class Status extends Commom {
       throw new Error(err)
     }
 
-    let hits
-    try {
-      hits = await this.getAhgoraHits()
-    } catch (err) {
-      console.log('Error:', err)
-      throw new Error(err)
-    }
-
-    const mount = this.mountInteractions(entries.normalize, hits.normalize)
+    const mount = this.mountInteractions(entries.normalize)
 
     const status = mount.reduce((accumulator, currentValue) => {
       /* eslint-disable camelcase */
       return accumulator.concat({
-        id: currentValue.job_id,
-        started_at: currentValue.started_at,
-        finished_at: currentValue.finished_at,
+        id: currentValue.IDTarefa,
+        started_at: currentValue.Inicio,
+        finished_at: currentValue.Fim,
       })
       /* eslint-disable camelcase */
     }, [])
