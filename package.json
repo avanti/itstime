@@ -9,7 +9,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "Eduardo C. de Souza",
+  "author": "Carlo Schneider <uab.carlo@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "nodemon bin/tacker.js"
