@@ -1,8 +1,18 @@
 const axios = require('axios')
 
-const Commom = require('./commom')
+const Common = require('./common')
 
-class Up extends Commom {
+const TATICO_REQUEST_HEADERS = {
+  App: '7DE19B1B-BAB5-4D46-A861-729AA8DFFB19',
+  cn: 'avanti2740',
+  Hash:
+    'R4KEQEqAQIA6gH6ARTpEgkRGOn5JRkA6R0FKfn5JgoWFgEBKgIWARUlCfkc6R0R+gDpEgoVKOoBKQkU6gYCBPkqERoWFgn6Efpp+j5eJQUdEPkFC',
+  IDUsr: 23,
+  Usr: 'bfb583a7-74ab-4df9-b935-cbc09e6ffdae',
+  'Content-Type': 'application/json',
+}
+
+class Up extends Common {
   constructor(args) {
     super(args)
 
@@ -24,57 +34,57 @@ class Up extends Commom {
       throw new Error(err)
     }
 
-    let hits
-    try {
-      hits = await this.getAhgoraHits()
-    } catch (err) {
-      console.log('Error:', err)
-      throw new Error(err)
-    }
-
-    const jobs = this.mountInteractions(entries.normalize, hits.normalize)
+    const jobs = this.mountInteractions(entries.normalize)
 
     await this.up(jobs)
   }
 
   async up(jobs) {
-    const jobberUrl = 'http://jobber-api.eavanti.com.br/api/v1/interactions'
+    const taticoUrl = 'https://api.tatico.net/api/tarefa/tempo'
+    let jobsPromises = []
 
     jobs.map(async currentValue => {
-      try {
-        const job = await axios.post(jobberUrl, currentValue, {
-          headers: {
-            Authorization: `Bearer ${this.config.jobber_token}`
+      jobsPromises.push(
+        new Promise(async (resolve, reject) => {
+          try {
+            const raw = await axios.post(taticoUrl, currentValue, {
+              headers: TATICO_REQUEST_HEADERS,
+            })
+
+            if (raw && raw.status == 200) {
+              resolve(raw)
+            }
+            reject()
+          } catch (error) {
+            throw new Error(error)
           }
         })
-
-        const response = {
-          start: job.data.interaction.started_at,
-          end: job.data.interaction.finished_at,
-          description: job.data.interaction.description
-        }
-
-        console.log('Done!')
-        console.log(JSON.stringify(response, null, 2))
-        console.log('\n')
-
-        return response
-      } catch (err) {
-        console.error('Error: On up jobs.', err.response.data.error)
-        throw new Error(err)
-      }
+      )
     })
+
+    try {
+      const uploadedJobs = await Promise.all(jobsPromises)
+
+      uploadedJobs.map(job => {
+        console.log(job.data)
+        console.log('Done!')
+        console.log('\n')
+      })
+      console.log(uploadedJobs.length + ' jobs were uploaded!')
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   help() {
     /* eslint-disable no-multi-spaces */
-    const help =  '\nUsage:\n' +
-                  '  \x1b[36mitstime\x1b[0m up <command>\n\n' +
-
-                  'Commands:\n' +
-                  '  today           Insert in Jobber status of today\n' +
-                  '  yesterday       Insert in Jobber status of yesterday\n' +
-                  '  <date>          Insert in Jobber status of a date <2017-06-29>\n'
+    const help =
+      '\nUsage:\n' +
+      '  \x1b[36mitstime\x1b[0m up <command>\n\n' +
+      'Commands:\n' +
+      '  today           Insert in Jobber status of today\n' +
+      '  yesterday       Insert in Jobber status of yesterday\n' +
+      '  <date>          Insert in Jobber status of a date <2017-06-29>\n'
     /* eslint-disable no-multi-spaces */
 
     console.log(help)

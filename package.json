@@ -1,22 +1,21 @@
 {
-  "name": "itstime",
-  "version": "1.1.0",
-  "description": "Its Time - Jobber, Ahgora and Toggl integration",
-  "main": "bin/itstime.js",
+  "name": "@edusorcer/tacker",
+  "version": "0.1.0",
+  "description": "Tacker - Tatico & Toggle integration",
+  "main": "bin/tacker.js",
   "bin": {
-    "itstime": "bin/itstime.js"
+    "tacker": "bin/tacker.js"
   },
-  "author": "Carlo Schneider <uab.carlo@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Eduardo C. de Souza",
   "license": "MIT",
   "scripts": {
-    "lint": "xo",
-    "prestart": "yarn run lint",
-    "start": "nodemon bin/itstime.js --exec 'yarn run lint && node'"
+    "start": "nodemon bin/tacker.js"
   },
   "devDependencies": {
-    "ava": "^0.22.0",
-    "nodemon": "^1.12.1",
-    "xo": "^0.18.2"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -25,16 +24,5 @@
     "moment": "^2.18.1",
     "mri": "^1.1.0",
     "toggl-api": "^1.0.1"
-  },
-  "xo": {
-    "semicolon": false,
-    "space": true,
-    "rules": {
-      "object-curly-spacing": 0,
-      "no-new": 0,
-      "capitalized-comments": [
-        0
-      ]
-    }
   }
 }

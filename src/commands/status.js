@@ -1,6 +1,6 @@
-const Commom = require('./commom')
+const Common = require('./common')
 
-class Status extends Commom {
+class Status extends Common {
   constructor(args) {
     super(args)
 
@@ -22,22 +22,14 @@ class Status extends Commom {
       throw new Error(err)
     }
 
-    let hits
-    try {
-      hits = await this.getAhgoraHits()
-    } catch (err) {
-      console.log('Error:', err)
-      throw new Error(err)
-    }
-
-    const mount = this.mountInteractions(entries.normalize, hits.normalize)
+    const mount = this.mountInteractions(entries.normalize)
 
     const status = mount.reduce((accumulator, currentValue) => {
       /* eslint-disable camelcase */
       return accumulator.concat({
-        description: currentValue.description,
-        started_at: currentValue.started_at,
-        finished_at: currentValue.finished_at
+        id: currentValue.IDTarefa,
+        started_at: currentValue.Inicio,
+        finished_at: currentValue.Fim,
       })
       /* eslint-disable camelcase */
     }, [])
@@ -47,13 +39,13 @@ class Status extends Commom {
 
   help() {
     /* eslint-disable no-multi-spaces */
-    const help =  '\nUsage:\n' +
-                  '  \x1b[36mitstime\x1b[0m status <command>\n\n' +
-
-                  'Commands:\n' +
-                  '  today           Return status of today\n' +
-                  '  yesterday       Return status of yesterday\n' +
-                  '  <date>          Return status of a date <2017-06-29>\n'
+    const help =
+      '\nUsage:\n' +
+      '  \x1b[36mitstime\x1b[0m status <command>\n\n' +
+      'Commands:\n' +
+      '  today           Return status of today\n' +
+      '  yesterday       Return status of yesterday\n' +
+      '  <date>          Return status of a date <2017-06-29>\n'
     /* eslint-disable no-multi-spaces */
 
     console.log(help)
