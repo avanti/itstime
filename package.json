@@ -1,10 +1,10 @@
 {
-  "name": "@edusorcer/tacker",
+  "name": "@edusorcer/itstime",
   "version": "0.1.0",
-  "description": "Tacker - Tatico & Toggle integration",
-  "main": "bin/tacker.js",
+  "description": "Itstime - Tatico & Toggle integration",
+  "main": "bin/itstime.js",
   "bin": {
-    "tacker": "bin/tacker.js"
+    "itstime": "bin/itstime.js"
   },
   "publishConfig": {
     "access": "public"
@@ -12,7 +12,7 @@
   "author": "Carlo Schneider <uab.carlo@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon bin/tacker.js"
+    "start": "nodemon bin/itstime.js"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"
